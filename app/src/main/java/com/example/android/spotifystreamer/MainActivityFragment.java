@@ -12,6 +12,8 @@ import android.view.ViewGroup;
  */
 public class MainActivityFragment extends Fragment {
 
+    private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+
     public MainActivityFragment() {
     }
 
