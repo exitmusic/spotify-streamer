@@ -12,7 +12,8 @@
         android:id="@+id/input_search_artist"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:imeOptions="actionSearch" />
 
     <ListView
         android:layout_width="match_parent"
