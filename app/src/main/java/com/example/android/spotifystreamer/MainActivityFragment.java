@@ -20,6 +20,7 @@ import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
 
@@ -49,7 +50,8 @@ public class MainActivityFragment extends Fragment {
                 // IME_ACTION_SEARCH on phone, IME_NULL on emulator keyboard
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL) {
                     //searchArtists(v.getText().toString());
-                    Log.v(LOG_TAG, v.getText().toString());
+                    SearchArtistsTask searchArtistsTask = new SearchArtistsTask();
+                    searchArtistsTask.execute(v.getText().toString());
                     handled = true;
                 }
                 return handled;
@@ -78,20 +80,29 @@ public class MainActivityFragment extends Fragment {
         return rootView;
     }
 
-    private class SearchArtistsTask extends AsyncTask<String, Void, Void> {
+    private class SearchArtistsTask extends AsyncTask<String, Void, ArtistsPager> {
 
         private final String LOG_TAG = SearchArtistsTask.class.getSimpleName();
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected ArtistsPager doInBackground(String... params) {
             // Connect to Spotify API with the wrapper
             SpotifyApi api = new SpotifyApi();
 
             // Create a SpotifyService object
             SpotifyService spotify = api.getService();
-            ArtistsPager results = spotify.searchArtists(params[0]);
 
-            return null;
+            return spotify.searchArtists(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(ArtistsPager results) {
+            //super.onPostExecute(aVoid);
+
+            for (Artist artist :  results.artists.items) {
+                Log.v(LOG_TAG, artist.name);
+            }
+
         }
     }
 }
