@@ -69,7 +69,7 @@ public class MainActivityFragment extends Fragment {
         mArtistAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_artist,
-                R.id.list_item_artist_textview,
+                R.id.list_item_artist_name_textview,
                 artists);
                 //new ArrayList<String>());
 
