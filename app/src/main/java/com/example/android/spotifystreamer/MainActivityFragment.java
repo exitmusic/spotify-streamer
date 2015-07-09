@@ -34,6 +34,12 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -56,7 +62,10 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        mArtistAdapter = new ArtistAdapter(getActivity(), new ArrayList<com.example.android.spotifystreamer.Artist>(0));
+        if (savedInstanceState == null) {
+            mArtistAdapter = new ArtistAdapter(getActivity(),
+                    new ArrayList<com.example.android.spotifystreamer.Artist>(0));
+        }
 
         // Get reference to ListView and bind the adapter to it
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artists);
