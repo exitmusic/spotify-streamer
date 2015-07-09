@@ -5,10 +5,10 @@ package com.example.android.spotifystreamer;
  */
 public class Artist {
     String name;
-    int image; // Drawable reference id
+    String imageUrl; // Drawable reference id
 
-    public Artist(String name, int image) {
+    public Artist(String name, String imageUrl) {
         this.name = name;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 }

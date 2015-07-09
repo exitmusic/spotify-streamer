@@ -9,13 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -30,7 +28,7 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
 public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
-    private ArrayAdapter<String> mArtistAdapter;
+    private ArtistAdapter mArtistAdapter;
 
     public MainActivityFragment() {
     }
@@ -58,20 +56,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        String[] artistData = {
-                "Grizzly Bear",
-                "Dirty Projectors",
-                "Beach House",
-                "Radiohead"
-        };
-        List<String> artists = new ArrayList<String>(Arrays.asList(artistData));
-
-        mArtistAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.list_item_artist,
-                R.id.list_item_artist_name_textview,
-                artists);
-                //new ArrayList<String>());
+        mArtistAdapter = new ArtistAdapter(getActivity(), new ArrayList<com.example.android.spotifystreamer.Artist>(0));
 
         // Get reference to ListView and bind the adapter to it
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artists);
@@ -97,12 +82,22 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArtistsPager results) {
-            //super.onPostExecute(aVoid);
+            List<com.example.android.spotifystreamer.Artist> artists = new ArrayList<>();
 
+            mArtistAdapter.clear();
             for (Artist artist :  results.artists.items) {
-                Log.v(LOG_TAG, artist.name);
-            }
+                com.example.android.spotifystreamer.Artist result;
+                String imageUrl = "";
 
+                if (!artist.images.isEmpty()) {
+                    imageUrl = artist.images.get(0).url;
+                    Log.v(LOG_TAG, artist.images.get(0).url);
+                }
+                result = new com.example.android.spotifystreamer.Artist(artist.name, imageUrl);
+                //artists.add(result);
+
+                mArtistAdapter.add(result);
+            }
         }
     }
 }
