@@ -1,5 +1,6 @@
 package com.example.android.spotifystreamer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,7 +54,7 @@ public class MainActivityFragment extends Fragment {
                 // IME_ACTION_SEARCH on phone, IME_NULL on emulator keyboard
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL) {
                     SearchArtistsTask searchArtistsTask = new SearchArtistsTask();
-                    
+
                     searchArtistsTask.execute(v.getText().toString());
                     handled = true;
                 }
@@ -67,7 +69,18 @@ public class MainActivityFragment extends Fragment {
 
         // Get reference to ListView and bind the adapter to it
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artists);
+
         listView.setAdapter(mArtistAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Artist artist = mArtistAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), ArtistTracksActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, artist.id);
+
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
