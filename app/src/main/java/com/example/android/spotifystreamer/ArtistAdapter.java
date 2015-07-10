@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import kaaes.spotify.webapi.android.models.Artist;
+
 /**
  * Created by kchang on 7/7/15.
  *
@@ -32,11 +34,10 @@ public class ArtistAdapter extends ArrayAdapter<Artist> {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_artist, parent, false);
 
         ImageView artistImageView = (ImageView) rootView.findViewById(R.id.list_item_artist_imageview);
-        //artistImageView.setImageResource(artist.imageUrl);
-        if (!artist.imageUrl.isEmpty()) {
-            Picasso.with(getContext()).load(artist.imageUrl).into(artistImageView);
-        }
 
+        if (!artist.images.isEmpty()) {
+            Picasso.with(getContext()).load(artist.images.get(0).url).into(artistImageView);
+        }
 
         TextView artistNameView = (TextView) rootView.findViewById(R.id.list_item_artist_name_textview);
         artistNameView.setText(artist.name);

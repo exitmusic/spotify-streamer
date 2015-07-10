@@ -3,7 +3,6 @@ package com.example.android.spotifystreamer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -64,7 +62,7 @@ public class MainActivityFragment extends Fragment {
 
         if (savedInstanceState == null) {
             mArtistAdapter = new ArtistAdapter(getActivity(),
-                    new ArrayList<com.example.android.spotifystreamer.Artist>(0));
+                    new ArrayList<Artist>(0));
         }
 
         // Get reference to ListView and bind the adapter to it
@@ -91,21 +89,10 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArtistsPager results) {
-            List<com.example.android.spotifystreamer.Artist> artists = new ArrayList<>();
-
             mArtistAdapter.clear();
+
             for (Artist artist :  results.artists.items) {
-                com.example.android.spotifystreamer.Artist result;
-                String imageUrl = "";
-
-                if (!artist.images.isEmpty()) {
-                    imageUrl = artist.images.get(0).url;
-                    Log.v(LOG_TAG, artist.images.get(0).url);
-                }
-                result = new com.example.android.spotifystreamer.Artist(artist.name, imageUrl);
-                //artists.add(result);
-
-                mArtistAdapter.add(result);
+                mArtistAdapter.add(artist);
             }
         }
     }
