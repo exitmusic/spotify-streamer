@@ -51,8 +51,8 @@ public class MainActivityFragment extends Fragment {
 
                 // IME_ACTION_SEARCH on phone, IME_NULL on emulator keyboard
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL) {
-                    //searchArtists(v.getText().toString());
                     SearchArtistsTask searchArtistsTask = new SearchArtistsTask();
+                    
                     searchArtistsTask.execute(v.getText().toString());
                     handled = true;
                 }
