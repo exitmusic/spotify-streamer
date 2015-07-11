@@ -31,20 +31,27 @@ public class ArtistTracksActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_artist_tracks, container, false);
         Intent intent = getActivity().getIntent();
-
-        // Use artistId passed from intent to get artist's top tracks
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            getTopTracks(intent.getStringExtra(Intent.EXTRA_TEXT));
-        }
-
+        View rootView = inflater.inflate(R.layout.fragment_artist_tracks, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist_tracks);
 
-        mArtistTrackAdapter = new ArtistTrackAdapter(getActivity(), new ArrayList<Track>());
+        if (savedInstanceState == null) {
+            mArtistTrackAdapter = new ArtistTrackAdapter(getActivity(), new ArrayList<Track>());
+
+            // Use artistId passed from intent to get artist's top tracks
+            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                getTopTracks(intent.getStringExtra(Intent.EXTRA_TEXT));
+            }
+        }
         listView.setAdapter(mArtistTrackAdapter);
 
         return rootView;
