@@ -11,7 +11,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:paddingRight="20dp"
-        android:id="@+id/list_item_artist_imageview" />
+        android:id="@+id/list_item_artist_imageview"
+        android:src="@drawable/no_image" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"

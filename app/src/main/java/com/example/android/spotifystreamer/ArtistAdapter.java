@@ -36,6 +36,7 @@ public class ArtistAdapter extends ArrayAdapter<Artist> {
         ImageView artistImageView = (ImageView) rootView.findViewById(R.id.list_item_artist_imageview);
 
         if (!artist.images.isEmpty()) {
+            // Using larger image because the smallest is fuzzy at 100x100dp
             Picasso.with(getContext()).load(artist.images.get(0).url).into(artistImageView);
         }
 
