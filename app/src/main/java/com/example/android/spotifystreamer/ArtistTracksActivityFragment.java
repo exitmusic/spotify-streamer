@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
+import retrofit.RetrofitError;
 
 
 /**
@@ -72,9 +74,16 @@ public class ArtistTracksActivityFragment extends Fragment {
             SpotifyApi api = new SpotifyApi();
             SpotifyService spotify = api.getService();
             HashMap<String, Object> queryMap = new HashMap<>();
+            Tracks tracksResult = new Tracks();
 
             queryMap.put("country", "US");
-            return spotify.getArtistTopTrack(params[0], queryMap);
+            try {
+                tracksResult = spotify.getArtistTopTrack(params[0], queryMap);
+            } catch (RetrofitError retrofitError) {
+                Log.e(LOG_TAG, retrofitError.toString());
+            }
+
+            return tracksResult;
         }
 
         @Override

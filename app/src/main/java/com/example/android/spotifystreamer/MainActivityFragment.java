@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+import retrofit.RetrofitError;
 
 
 /**
@@ -96,13 +98,20 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected ArtistsPager doInBackground(String... params) {
+            ArtistsPager artistsResult = new ArtistsPager();
+
             // Connect to Spotify API with the wrapper
             SpotifyApi api = new SpotifyApi();
 
             // Create a SpotifyService object
             SpotifyService spotify = api.getService();
 
-            return spotify.searchArtists(params[0]);
+            try {
+                artistsResult = spotify.searchArtists(params[0]);
+            } catch (RetrofitError retrofitError) {
+                Log.e(LOG_TAG, retrofitError.toString());
+            }
+            return artistsResult;
         }
 
         @Override
