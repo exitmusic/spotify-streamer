@@ -21,6 +21,7 @@ import kaaes.spotify.webapi.android.models.Artist;
  * https://github.com/udacity/android-custom-arrayadapter
  */
 public class ArtistAdapter extends ArrayAdapter<Artist> {
+
     private static final String LOG_TAG = ArtistAdapter.class.getSimpleName();
 
     public ArtistAdapter(Activity context, List<Artist> artists) {
@@ -30,7 +31,6 @@ public class ArtistAdapter extends ArrayAdapter<Artist> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Artist artist = getItem(position);
-
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_artist, parent, false);
 
         ImageView artistImageView = (ImageView) rootView.findViewById(R.id.list_item_artist_imageview);

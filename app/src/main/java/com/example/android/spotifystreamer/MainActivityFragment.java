@@ -63,8 +63,7 @@ public class MainActivityFragment extends Fragment {
         });
 
         if (savedInstanceState == null) {
-            mArtistAdapter = new ArtistAdapter(getActivity(),
-                    new ArrayList<Artist>(0));
+            mArtistAdapter = new ArtistAdapter(getActivity(), new ArrayList<Artist>(0));
         }
 
         // Get reference to ListView and bind the adapter to it
@@ -104,7 +103,7 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(ArtistsPager results) {
             mArtistAdapter.clear();
 
-            for (Artist artist :  results.artists.items) {
+            for (Artist artist : results.artists.items) {
                 mArtistAdapter.add(artist);
             }
         }
