@@ -80,7 +80,8 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = mArtistAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), ArtistTracksActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, artist.id);
+                        .putExtra(Intent.EXTRA_TEXT, artist.id)
+                        .putExtra(Intent.EXTRA_TITLE, artist.name);
 
                 startActivity(intent);
             }

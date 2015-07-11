@@ -1,7 +1,9 @@
 package com.example.android.spotifystreamer;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,21 @@ public class ArtistTracksActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_tracks);
+
+        Intent intent = getIntent();
+
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TITLE)) {
+            String artistName = intent.getStringExtra(Intent.EXTRA_TITLE);
+            ActionBar actionBar = getSupportActionBar();
+
+            // Help from discussion forum:
+            // https://discussions.udacity.com/t/getactionbar-returns-null/22885/2?u=kai_3206503580210654
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setSubtitle(artistName);
+            }
+        }
+
     }
 
 
