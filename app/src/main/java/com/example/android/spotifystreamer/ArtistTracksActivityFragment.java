@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,8 +74,12 @@ public class ArtistTracksActivityFragment extends Fragment {
         protected void onPostExecute(Tracks tracks) {
             mArtistTrackAdapter.clear();
 
-            for (Track track : tracks.tracks) {
-                mArtistTrackAdapter.add(track);
+            if (!tracks.tracks.isEmpty()) {
+                for (Track track : tracks.tracks) {
+                    mArtistTrackAdapter.add(track);
+                }
+            } else {
+                Toast.makeText(getActivity(), "No tracks available", Toast.LENGTH_SHORT).show();
             }
         }
     }
