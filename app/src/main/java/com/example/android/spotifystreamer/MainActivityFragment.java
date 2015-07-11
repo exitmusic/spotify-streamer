@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private ArtistAdapter mArtistAdapter;
+    private Toast mToast;
 
     public MainActivityFragment() {
     }
@@ -54,8 +56,11 @@ public class MainActivityFragment extends Fragment {
                 // IME_ACTION_SEARCH on phone, IME_NULL on emulator keyboard
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_NULL) {
                     SearchArtistsTask searchArtistsTask = new SearchArtistsTask();
+                    String searchArtist = v.getText().toString();
 
-                    searchArtistsTask.execute(v.getText().toString());
+                    // Create toast in case artist is not found
+                    mToast = Toast.makeText(getActivity(), searchArtist + " not found.", Toast.LENGTH_SHORT);
+                    searchArtistsTask.execute(searchArtist);
                     handled = true;
                 }
                 return handled;
@@ -103,8 +108,12 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(ArtistsPager results) {
             mArtistAdapter.clear();
 
-            for (Artist artist : results.artists.items) {
-                mArtistAdapter.add(artist);
+            if (!results.artists.items.isEmpty()) {
+                for (Artist artist : results.artists.items) {
+                    mArtistAdapter.add(artist);
+                }
+            } else {
+                mToast.show();
             }
         }
     }
