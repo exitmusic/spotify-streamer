@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,6 +56,16 @@ public class ArtistTracksActivityFragment extends Fragment {
             }
         }
         listView.setAdapter(mArtistTrackAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Track track = mArtistTrackAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), PlayActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, track.preview_url);
+
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
