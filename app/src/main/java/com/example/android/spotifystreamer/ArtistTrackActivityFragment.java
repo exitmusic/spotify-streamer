@@ -25,12 +25,12 @@ import retrofit.RetrofitError;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ArtistTracksActivityFragment extends Fragment {
+public class ArtistTrackActivityFragment extends Fragment {
 
-    private final String LOG_TAG = ArtistTracksActivityFragment.class.getSimpleName();
+    private final String LOG_TAG = ArtistTrackActivityFragment.class.getSimpleName();
     private ArtistTrackAdapter mArtistTrackAdapter;
 
-    public ArtistTracksActivityFragment() {
+    public ArtistTrackActivityFragment() {
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ArtistTracksActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Intent intent = getActivity().getIntent();
-        View rootView = inflater.inflate(R.layout.fragment_artist_tracks, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_artist_track, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist_tracks);
 
         if (savedInstanceState == null) {

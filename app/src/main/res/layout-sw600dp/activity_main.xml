@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/artist_search_fragment"
-        android:name="com.example.android.spotifystreamer.MainActivityFragment"
+        android:name="com.example.android.spotifystreamer.SearchArtistFragment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1" />

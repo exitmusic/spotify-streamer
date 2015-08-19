@@ -25,13 +25,13 @@ import retrofit.RetrofitError;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class SearchArtistFragment extends Fragment {
 
-    private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+    private final String LOG_TAG = SearchArtistFragment.class.getSimpleName();
     private ArtistAdapter mArtistAdapter;
     private Toast mToast;
 
-    public MainActivityFragment() {
+    public SearchArtistFragment() {
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_search_artist, container, false);
         SearchView searchView = (SearchView) rootView.findViewById(R.id.input_search_artist);
 
         searchView.setIconifiedByDefault(false);
@@ -76,7 +76,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = mArtistAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), ArtistTracksActivity.class)
+                Intent intent = new Intent(getActivity(), ArtistTrackActivity.class)
                         .putExtra(Intent.EXTRA_TEXT, artist.id)
                         .putExtra(Intent.EXTRA_TITLE, artist.name);
 
