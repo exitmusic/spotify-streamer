@@ -64,8 +64,8 @@ public class ArtistTracksActivityFragment extends Fragment {
                         .putExtra(PlayActivityFragment.ARTIST_NAME, track.artists.get(0).name)
                         .putExtra(PlayActivityFragment.ALBUM, track.album.name)
                         .putExtra(PlayActivityFragment.COVER_URL, track.album.images.get(0).url)
-                        .putExtra(PlayActivityFragment.TRACK_NAME, track.preview_url)
-                        .putExtra(PlayActivityFragment.TRACK_DURATION, track.preview_url)
+                        .putExtra(PlayActivityFragment.TRACK_NAME, track.name)
+                        .putExtra(PlayActivityFragment.TRACK_DURATION, track.duration_ms)
                         .putExtra(PlayActivityFragment.PREVIEW_URL, track.preview_url);
 
                 startActivity(intent);

@@ -56,7 +56,9 @@ public class PlayActivityFragment extends Fragment {
         mArtistNameView.setText(intent.getStringExtra(PlayActivityFragment.ARTIST_NAME));
         mAlbumNameView.setText(intent.getStringExtra(PlayActivityFragment.ALBUM));
         Picasso.with(getActivity()).load(intent.getStringExtra(PlayActivityFragment.COVER_URL)).into(mCoverView);
-
+        mTrackNameView.setText(intent.getStringExtra(PlayActivityFragment.TRACK_NAME));
+        mTrackDurationStartView.setText("0:00");
+        mTrackDurationEndView.setText("0:30");
 
         // Use preview track url to play track
         if (intent != null) {
