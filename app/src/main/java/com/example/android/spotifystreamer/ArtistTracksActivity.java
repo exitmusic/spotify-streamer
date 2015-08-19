@@ -28,9 +28,7 @@ public class ArtistTracksActivity extends ActionBarActivity {
                 actionBar.setSubtitle(artistName);
             }
         }
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

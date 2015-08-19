@@ -61,7 +61,12 @@ public class ArtistTracksActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Track track = mArtistTrackAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), PlayActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, track.preview_url);
+                        .putExtra(PlayActivityFragment.ARTIST_NAME, track.artists.get(0).name)
+                        .putExtra(PlayActivityFragment.ALBUM, track.album.name)
+                        .putExtra(PlayActivityFragment.COVER_URL, track.album.images.get(0).url)
+                        .putExtra(PlayActivityFragment.TRACK_NAME, track.preview_url)
+                        .putExtra(PlayActivityFragment.TRACK_DURATION, track.preview_url)
+                        .putExtra(PlayActivityFragment.PREVIEW_URL, track.preview_url);
 
                 startActivity(intent);
             }
