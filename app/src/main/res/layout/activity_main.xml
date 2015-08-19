@@ -1,6 +1,6 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
+    android:id="@+id/fragment_search_artist"
     android:name="com.example.android.spotifystreamer.SearchArtistFragment"
     tools:layout="@layout/fragment_search_artist"
     android:layout_width="match_parent"

@@ -8,10 +8,31 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
+
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (findViewById(R.id.artist_tracks_container) != null) {
+            // The artists tracks container will only be present in two-pane mode
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by adding or replacing the
+            // artist tracks fragment using a fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.artist_tracks_container, new ArtistTrackActivityFragment(),
+                                ARTISTTRACKFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+            //getSupportActionBar().setElevation(0f);
+        }
     }
 
     @Override

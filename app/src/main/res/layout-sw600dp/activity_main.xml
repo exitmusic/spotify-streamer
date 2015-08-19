@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/artist_search_fragment"
+        android:id="@+id/fragment_search_artist"
         android:name="com.example.android.spotifystreamer.SearchArtistFragment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
