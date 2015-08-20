@@ -16,9 +16,10 @@ public class ArtistTrackActivity extends ActionBarActivity {
         setContentView(R.layout.activity_artist_track);
 
         Intent intent = getIntent();
+        String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String artistName = intent.getStringExtra(Intent.EXTRA_TITLE);
 
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TITLE)) {
-            String artistName = intent.getStringExtra(Intent.EXTRA_TITLE);
+        if (intent != null) {
             ActionBar actionBar = getSupportActionBar();
 
             // Help from discussion forum:
@@ -27,6 +28,19 @@ public class ArtistTrackActivity extends ActionBarActivity {
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setSubtitle(artistName);
             }
+        }
+
+        if (savedInstanceState == null) {
+            Bundle args = new Bundle();
+            args.putString(ArtistTrackActivityFragment.ARTIST_ID, artistId);
+            args.putString(ArtistTrackActivityFragment.ARTIST_NAME, artistName);
+
+            ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.artist_tracks_container, fragment)
+                    .commit();
         }
     }
 

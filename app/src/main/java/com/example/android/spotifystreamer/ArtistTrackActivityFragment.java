@@ -28,7 +28,11 @@ import retrofit.RetrofitError;
 public class ArtistTrackActivityFragment extends Fragment {
 
     private final String LOG_TAG = ArtistTrackActivityFragment.class.getSimpleName();
+    static final String ARTIST_ID = "ARTIST_ID";
+    static final String ARTIST_NAME = "ARTIST_NAME";
+
     private ArtistTrackAdapter mArtistTrackAdapter;
+    private String mArtistId;
 
     public ArtistTrackActivityFragment() {
     }
@@ -43,7 +47,13 @@ public class ArtistTrackActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
+        Bundle args = getArguments();
+
+        if (args != null) {
+            mArtistId = args.getString(ARTIST_ID);
+        }
+
+        //Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_artist_track, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist_tracks);
 
@@ -51,8 +61,8 @@ public class ArtistTrackActivityFragment extends Fragment {
             mArtistTrackAdapter = new ArtistTrackAdapter(getActivity(), new ArrayList<Track>());
 
             // Use artistId passed from intent to get artist's top tracks
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                getTopTracks(intent.getStringExtra(Intent.EXTRA_TEXT));
+            if (mArtistId != null) {
+                getTopTracks(mArtistId);
             }
         }
         listView.setAdapter(mArtistTrackAdapter);

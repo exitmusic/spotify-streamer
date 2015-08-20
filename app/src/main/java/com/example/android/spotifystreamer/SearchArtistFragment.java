@@ -1,6 +1,5 @@
 package com.example.android.spotifystreamer;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +29,18 @@ public class SearchArtistFragment extends Fragment {
     private final String LOG_TAG = SearchArtistFragment.class.getSimpleName();
     private ArtistAdapter mArtistAdapter;
     private Toast mToast;
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        void onItemSelected(String artistId, String artistName);
+    }
 
     public SearchArtistFragment() {
     }
@@ -76,11 +87,8 @@ public class SearchArtistFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = mArtistAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), ArtistTrackActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, artist.id)
-                        .putExtra(Intent.EXTRA_TITLE, artist.name);
 
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(artist.id, artist.name);
             }
         });
 

@@ -1,12 +1,13 @@
 package com.example.android.spotifystreamer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SearchArtistFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
@@ -21,8 +22,8 @@ public class MainActivity extends ActionBarActivity {
         if (findViewById(R.id.artist_tracks_container) != null) {
             // The artists tracks container will only be present in two-pane mode
             mTwoPane = true;
-            // In two-pane mode, show the detail view in this activity by adding or replacing the
-            // artist tracks fragment using a fragment transaction.
+            // In two-pane mode, show the artist track view in this activity by adding or replacing
+            // the artist tracks fragment using a fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.artist_tracks_container, new ArtistTrackActivityFragment(),
@@ -55,5 +56,28 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(String artistId, String artistName) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by adding or replacing
+            // the detail fragment using a fragment transaction.
+            Bundle args = new Bundle();
+            args.putString(ArtistTrackActivityFragment.ARTIST_ID, artistId);
+            args.putString(ArtistTrackActivityFragment.ARTIST_NAME, artistName);
+
+            ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.artist_tracks_container, fragment, ARTISTTRACKFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, ArtistTrackActivity.class)
+                    .putExtra(Intent.EXTRA_TEXT, artistId)
+                    .putExtra(Intent.EXTRA_TITLE, artistName);
+            startActivity(intent);
+        }
     }
 }
