@@ -37,7 +37,7 @@ public class SearchArtistFragment extends Fragment {
      */
     public interface Callback {
         /**
-         * DetailFragmentCallback for when an item has been selected.
+         * ArtistTrackCallback for when an item has been selected.
          */
         void onArtistSelected(String artistId, String artistName);
     }
