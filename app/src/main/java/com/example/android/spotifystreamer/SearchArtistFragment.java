@@ -39,7 +39,7 @@ public class SearchArtistFragment extends Fragment {
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(String artistId, String artistName);
+        void onArtistSelected(String artistId, String artistName);
     }
 
     public SearchArtistFragment() {
@@ -88,7 +88,7 @@ public class SearchArtistFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist artist = mArtistAdapter.getItem(position);
 
-                ((Callback) getActivity()).onItemSelected(artist.id, artist.name);
+                ((Callback) getActivity()).onArtistSelected(artist.id, artist.name);
             }
         });
 

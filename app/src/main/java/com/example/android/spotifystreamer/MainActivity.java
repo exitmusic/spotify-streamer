@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
     }
 
     @Override
-    public void onItemSelected(String artistId, String artistName) {
+    public void onArtistSelected(String artistId, String artistName) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by adding or replacing
             // the detail fragment using a fragment transaction.
