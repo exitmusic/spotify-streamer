@@ -93,7 +93,7 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         // To make it fullscreen, use the 'content' root view as the container
         // for the fragment, which is always the root view for the activity
-        transaction.add(android.R.id.content, fragment)
+        transaction.add(R.id.artist_tracks_container, fragment)
                 .addToBackStack(null).commit();
     }
 }
