@@ -1,10 +1,9 @@
 package com.example.android.spotifystreamer;
 
-import android.app.DialogFragment;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,8 @@ public class PlayActivityFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
+        Bundle args = getArguments();
+        //Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
 
         mArtistNameView = (TextView) rootView.findViewById(R.id.play_artist_name);
@@ -53,16 +53,16 @@ public class PlayActivityFragment extends DialogFragment {
         mTrackDurationStartView = (TextView) rootView.findViewById(R.id.play_track_duration_start);
         mTrackDurationEndView = (TextView) rootView.findViewById(R.id.play_track_duration_end);
 
-        mArtistNameView.setText(intent.getStringExtra(PlayActivityFragment.ARTIST_NAME));
-        mAlbumNameView.setText(intent.getStringExtra(PlayActivityFragment.ALBUM));
-        Picasso.with(getActivity()).load(intent.getStringExtra(PlayActivityFragment.COVER_URL)).into(mCoverView);
-        mTrackNameView.setText(intent.getStringExtra(PlayActivityFragment.TRACK_NAME));
+        mArtistNameView.setText(args.getString(PlayActivityFragment.ARTIST_NAME));
+        mAlbumNameView.setText(args.getString(PlayActivityFragment.ALBUM));
+        Picasso.with(getActivity()).load(args.getString(PlayActivityFragment.COVER_URL)).into(mCoverView);
+        mTrackNameView.setText(args.getString(PlayActivityFragment.TRACK_NAME));
         mTrackDurationStartView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
 
         // Use preview track url to play track
-        if (intent != null) {
-            String previewUrl = intent.getStringExtra(PlayActivityFragment.PREVIEW_URL);
+        if (args != null) {
+            String previewUrl = args.getString(PlayActivityFragment.PREVIEW_URL);
 
             // Prepare and start media player
             MediaPlayer mediaPlayer = new MediaPlayer();

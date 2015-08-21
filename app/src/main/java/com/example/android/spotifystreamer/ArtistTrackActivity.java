@@ -2,13 +2,14 @@ package com.example.android.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class ArtistTrackActivity extends ActionBarActivity {
+public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrackActivityFragment.Callback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,5 +65,35 @@ public class ArtistTrackActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTrackSelected(
+            String artistName,
+            String album,
+            String cover,
+            String track,
+            Long duration,
+            String previewUrl) {
+
+        PlayActivityFragment fragment = new PlayActivityFragment();
+        Bundle args = new Bundle();
+
+        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
+        args.putString(PlayActivityFragment.ALBUM, album);
+        args.putString(PlayActivityFragment.COVER_URL, cover);
+        args.putString(PlayActivityFragment.TRACK_NAME, track);
+        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
+        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
+        fragment.setArguments(args);
+
+        // The device is smaller, so show the fragment fullscreen
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // For a little polish, specify a transition animation
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        // To make it fullscreen, use the 'content' root view as the container
+        // for the fragment, which is always the root view for the activity
+        transaction.add(android.R.id.content, fragment)
+                .addToBackStack(null).commit();
     }
 }

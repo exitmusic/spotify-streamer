@@ -2,12 +2,14 @@ package com.example.android.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity implements SearchArtistFragment.Callback {
+public class MainActivity extends ActionBarActivity
+        implements SearchArtistFragment.Callback, ArtistTrackActivityFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
@@ -79,5 +81,31 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
                     .putExtra(Intent.EXTRA_TITLE, artistName);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onTrackSelected(
+            String artistName,
+            String album,
+            String cover,
+            String track,
+            Long duration,
+            String previewUrl) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        PlayActivityFragment fragment = new PlayActivityFragment();
+        Bundle args = new Bundle();
+
+        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
+        args.putString(PlayActivityFragment.ALBUM, album);
+        args.putString(PlayActivityFragment.COVER_URL, cover);
+        args.putString(PlayActivityFragment.TRACK_NAME, track);
+        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
+        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
+        fragment.setArguments(args);
+
+        // The device is using a large layout, so show the fragment as a dialog
+        fragment.show(fragmentManager, "dialog");
+
     }
 }

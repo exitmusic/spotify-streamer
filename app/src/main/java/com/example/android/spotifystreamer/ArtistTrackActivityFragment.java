@@ -1,6 +1,5 @@
 package com.example.android.spotifystreamer;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,6 +32,25 @@ public class ArtistTrackActivityFragment extends Fragment {
 
     private ArtistTrackAdapter mArtistTrackAdapter;
     private String mArtistId;
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * PlayCallback for when an item has been selected.
+         */
+        void onTrackSelected(
+                String artistName,
+                String album,
+                String cover,
+                String track,
+                Long duration,
+                String previewUrl
+        );
+    }
 
     public ArtistTrackActivityFragment() {
     }
@@ -70,15 +88,23 @@ public class ArtistTrackActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Track track = mArtistTrackAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), PlayActivity.class)
-                        .putExtra(PlayActivityFragment.ARTIST_NAME, track.artists.get(0).name)
-                        .putExtra(PlayActivityFragment.ALBUM, track.album.name)
-                        .putExtra(PlayActivityFragment.COVER_URL, track.album.images.get(0).url)
-                        .putExtra(PlayActivityFragment.TRACK_NAME, track.name)
-                        .putExtra(PlayActivityFragment.TRACK_DURATION, track.duration_ms)
-                        .putExtra(PlayActivityFragment.PREVIEW_URL, track.preview_url);
 
-                startActivity(intent);
+                ((Callback) getActivity()).onTrackSelected(
+                        track.artists.get(0).name,
+                        track.album.name,
+                        track.album.images.get(0).url,
+                        track.name,
+                        track.duration_ms,
+                        track.preview_url);
+//                Intent intent = new Intent(getActivity(), PlayActivity.class)
+//                        .putExtra(PlayActivityFragment.ARTIST_NAME, track.artists.get(0).name)
+//                        .putExtra(PlayActivityFragment.ALBUM, track.album.name)
+//                        .putExtra(PlayActivityFragment.COVER_URL, track.album.images.get(0).url)
+//                        .putExtra(PlayActivityFragment.TRACK_NAME, track.name)
+//                        .putExtra(PlayActivityFragment.TRACK_DURATION, track.duration_ms)
+//                        .putExtra(PlayActivityFragment.PREVIEW_URL, track.preview_url);
+//
+//                startActivity(intent);
             }
         });
 
