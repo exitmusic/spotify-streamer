@@ -1,8 +1,7 @@
 package com.example.android.spotifystreamer;
 
 import android.app.Dialog;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -13,9 +12,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.spotifystreamer.service.PlayService;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -56,34 +54,25 @@ public class PlayActivityFragment extends DialogFragment {
         mTrackDurationStartView = (TextView) rootView.findViewById(R.id.play_track_duration_start);
         mTrackDurationEndView = (TextView) rootView.findViewById(R.id.play_track_duration_end);
 
-        mArtistNameView.setText(args.getString(PlayActivityFragment.ARTIST_NAME));
-        mAlbumNameView.setText(args.getString(PlayActivityFragment.ALBUM));
-        Picasso.with(getActivity()).load(args.getString(PlayActivityFragment.COVER_URL)).into(mCoverView);
-        mTrackNameView.setText(args.getString(PlayActivityFragment.TRACK_NAME));
+        String artistName = args.getString(ARTIST_NAME);
+        String albumName = args.getString(ALBUM);
+        String coverUrl = args.getString(COVER_URL);
+        String trackName = args.getString(TRACK_NAME);
+        String previewUrl = args.getString(PREVIEW_URL);
+
+        mArtistNameView.setText(artistName);
+        mAlbumNameView.setText(albumName);
+        Picasso.with(getActivity()).load(coverUrl).into(mCoverView);
+        mTrackNameView.setText(trackName);
         mTrackDurationStartView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
 
         // Use preview track url to play track
-        if (args != null) {
-            String previewUrl = args.getString(PlayActivityFragment.PREVIEW_URL);
+        if (previewUrl != null) {
+            Intent intent = new Intent(getActivity(), PlayService.class);
 
-            // Prepare and start media player
-            MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-            try {
-                mediaPlayer.setDataSource(previewUrl);
-                mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
-            } catch (IOException e) {
-
-            }
-
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
+            intent.putExtra(Intent.EXTRA_TEXT, previewUrl);
+            getActivity().startService(intent);
         }
 
         return rootView;
