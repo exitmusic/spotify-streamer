@@ -1,6 +1,8 @@
 package com.example.android.spotifystreamer;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.android.spotifystreamer.service.PlayService;
@@ -32,8 +35,12 @@ public class PlayActivityFragment extends DialogFragment {
     private TextView mAlbumNameView;
     private ImageView mCoverView;
     private TextView mTrackNameView;
+    private SeekBar mSeekBar;
     private TextView mTrackDurationStartView;
     private TextView mTrackDurationEndView;
+    private ImageView mPrevious;
+    private ImageView mPlayPause;
+    private ImageView mNext;
 
 
     public PlayActivityFragment() {
@@ -44,15 +51,7 @@ public class PlayActivityFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         Bundle args = getArguments();
-        //Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
-
-        mArtistNameView = (TextView) rootView.findViewById(R.id.play_artist_name);
-        mAlbumNameView = (TextView) rootView.findViewById(R.id.play_artist_album);
-        mCoverView = (ImageView) rootView.findViewById(R.id.play_album_cover);
-        mTrackNameView = (TextView) rootView.findViewById(R.id.play_track_name);
-        mTrackDurationStartView = (TextView) rootView.findViewById(R.id.play_track_duration_start);
-        mTrackDurationEndView = (TextView) rootView.findViewById(R.id.play_track_duration_end);
 
         String artistName = args.getString(ARTIST_NAME);
         String albumName = args.getString(ALBUM);
@@ -60,12 +59,16 @@ public class PlayActivityFragment extends DialogFragment {
         String trackName = args.getString(TRACK_NAME);
         String previewUrl = args.getString(PREVIEW_URL);
 
+        getViews(rootView);
+        setPlayControls();
         mArtistNameView.setText(artistName);
         mAlbumNameView.setText(albumName);
         Picasso.with(getActivity()).load(coverUrl).into(mCoverView);
         mTrackNameView.setText(trackName);
+        mSeekBar.setMax(30);
         mTrackDurationStartView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
+
 
         // Use preview track url to play track
         if (previewUrl != null) {
@@ -78,6 +81,42 @@ public class PlayActivityFragment extends DialogFragment {
         return rootView;
     }
 
+    private void getViews(View rootView) {
+        mArtistNameView = (TextView) rootView.findViewById(R.id.play_artist_name);
+        mAlbumNameView = (TextView) rootView.findViewById(R.id.play_artist_album);
+        mCoverView = (ImageView) rootView.findViewById(R.id.play_album_cover);
+        mTrackNameView = (TextView) rootView.findViewById(R.id.play_track_name);
+        mSeekBar = (SeekBar) rootView.findViewById(R.id.play_track_seekbar);
+        mTrackDurationStartView = (TextView) rootView.findViewById(R.id.play_track_duration_start);
+        mTrackDurationEndView = (TextView) rootView.findViewById(R.id.play_track_duration_end);
+        mPrevious = (ImageView) rootView.findViewById(R.id.play_previous_icon);
+        mPlayPause = (ImageView) rootView.findViewById(R.id.play_pause_play_icon);
+        mNext = (ImageView) rootView.findViewById(R.id.play_next_icon);
+    }
+
+    private void setPlayControls() {
+        mPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -85,5 +124,12 @@ public class PlayActivityFragment extends DialogFragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         return dialog;
+    }
+
+    public class PlayFragmentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
     }
 }

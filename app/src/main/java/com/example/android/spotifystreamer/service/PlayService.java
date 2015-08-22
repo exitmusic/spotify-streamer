@@ -52,6 +52,8 @@ public class PlayService extends Service implements
         return 0;
     }
 
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -93,7 +95,7 @@ public class PlayService extends Service implements
         }
     }
 
-    public class PlayReceiver extends BroadcastReceiver {
+    public class PlayServiceReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
 

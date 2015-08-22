@@ -34,7 +34,7 @@
         android:layout_height="wrap_content" />
 
     <SeekBar
-        android:id="@+id/play_track_scrub"
+        android:id="@+id/play_track_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
