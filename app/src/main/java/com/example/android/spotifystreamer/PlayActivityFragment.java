@@ -2,6 +2,8 @@ package com.example.android.spotifystreamer;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -13,8 +15,9 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.android.spotifystreamer.service.PlayService;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,7 +49,8 @@ public class PlayActivityFragment extends DialogFragment {
     private ImageView mPlayPause;
     private ImageView mNext;
 
-    private Thread seekBarThread;
+    private MediaPlayer mMediaPlayer;
+
 
     public PlayActivityFragment() {
     }
@@ -77,13 +81,33 @@ public class PlayActivityFragment extends DialogFragment {
 
         // Use preview track url to play track
         if (previewUrl != null) {
-            Intent intent = new Intent(getActivity(), PlayService.class);
+            initMediaPlayer();
+            mMediaPlayer.reset();
 
-            intent.putExtra(Intent.EXTRA_TEXT, previewUrl);
-            getActivity().startService(intent);
+            try {
+                mMediaPlayer.setDataSource(previewUrl);
+                mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+            } catch (IOException e) {
+
+            }
+
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
         }
 
         return rootView;
+    }
+
+    private void initMediaPlayer() {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+        }
+
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     private void getViews(View rootView) {
