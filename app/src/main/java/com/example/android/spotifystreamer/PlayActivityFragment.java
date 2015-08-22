@@ -109,7 +109,7 @@ public class PlayActivityFragment extends DialogFragment {
             }
         });
 
-        mPrevious.setOnClickListener(new View.OnClickListener() {
+        mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
