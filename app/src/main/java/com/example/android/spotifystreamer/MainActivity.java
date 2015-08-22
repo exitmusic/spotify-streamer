@@ -1,5 +1,7 @@
 package com.example.android.spotifystreamer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -13,25 +15,20 @@ public class MainActivity extends ActionBarActivity
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
+    private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
 
     private boolean mTwoPane;
+    private static FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFragmentManager = getSupportFragmentManager();
 
         if (findViewById(R.id.artist_tracks_container) != null) {
             // The artists tracks container will only be present in two-pane mode
             mTwoPane = true;
-            // In two-pane mode, show the artist track view in this activity by adding or replacing
-            // the artist tracks fragment using a fragment transaction.
-            if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.artist_tracks_container, new ArtistTrackActivityFragment(),
-                                ARTISTTRACKFRAGMENT_TAG)
-                        .commit();
-            }
         } else {
             mTwoPane = false;
             //getSupportActionBar().setElevation(0f);
@@ -72,7 +69,7 @@ public class MainActivity extends ActionBarActivity
             ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
             fragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction()
+            mFragmentManager.beginTransaction()
                     .replace(R.id.artist_tracks_container, fragment, ARTISTTRACKFRAGMENT_TAG)
                     .commit();
         } else {
@@ -92,7 +89,7 @@ public class MainActivity extends ActionBarActivity
             Long duration,
             String previewUrl) {
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
         PlayActivityFragment fragment = new PlayActivityFragment();
         Bundle args = new Bundle();
 
@@ -105,7 +102,31 @@ public class MainActivity extends ActionBarActivity
         fragment.setArguments(args);
 
         // The device is using a large layout, so show the fragment as a dialog
-        fragment.show(fragmentManager, "dialog");
+        fragment.show(mFragmentManager, PLAYACTIVITYFRAGMENT_TAG);
 
+    }
+
+    public static class PlayActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int playAction = intent.getIntExtra(Intent.ACTION_CALL, -1);
+            PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
+                    .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
+
+            if (paf != null) {
+                switch (playAction) {
+                    case PlayActivityFragment.TRACK_PLAY:
+                        paf.startSeekBar();
+                        break;
+                    case PlayActivityFragment.TRACK_PAUSE:
+                        break;
+                    case PlayActivityFragment.TRACK_PREVIOUS:
+                        break;
+                    case PlayActivityFragment.TRACK_NEXT:
+                        break;
+                }
+            }
+
+        }
     }
 }

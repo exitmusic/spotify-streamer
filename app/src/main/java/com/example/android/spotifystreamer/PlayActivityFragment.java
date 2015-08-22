@@ -1,8 +1,6 @@
 package com.example.android.spotifystreamer;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,12 +22,18 @@ import com.squareup.picasso.Picasso;
 public class PlayActivityFragment extends DialogFragment {
 
     private static final String LOG_TAG = PlayActivityFragment.class.getSimpleName();
+
     static final String ARTIST_NAME = "ARTIST_NAME";
     static final String ALBUM = "ALBUM";
     static final String COVER_URL = "COVER_URL";
     static final String TRACK_NAME = "TRACK_NAME";
     static final String TRACK_DURATION = "TRACK_DURATION";
     static final String PREVIEW_URL = "PREVIEW_URL";
+
+    public static final int TRACK_PLAY = 0;
+    public static final int TRACK_PAUSE = 1;
+    public static final int TRACK_PREVIOUS = 2;
+    public static final int TRACK_NEXT = 3;
 
     private TextView mArtistNameView;
     private TextView mAlbumNameView;
@@ -126,10 +130,8 @@ public class PlayActivityFragment extends DialogFragment {
         return dialog;
     }
 
-    public class PlayFragmentReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        }
+    public void startSeekBar() {
+//        int progress = mSeekBar.getProgress();
+//        mSeekBar.setProgress(progress + 1);
     }
 }

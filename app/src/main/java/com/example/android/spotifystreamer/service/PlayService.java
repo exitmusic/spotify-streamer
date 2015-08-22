@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.example.android.spotifystreamer.MainActivity;
+import com.example.android.spotifystreamer.PlayActivityFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +66,14 @@ public class PlayService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+
+        if (mp.isPlaying()) {
+            Intent intent = new Intent(this, MainActivity.PlayActivityReceiver.class);
+
+            intent.putExtra(Intent.ACTION_CALL, PlayActivityFragment.TRACK_PLAY);
+            sendBroadcast(intent);
+            //mp.getCurrentPosition()
+        }
     }
 
     @Override
@@ -89,13 +99,7 @@ public class PlayService extends Service implements
         playlist = pl;
     }
 
-    public class PlayBinder extends Binder {
-        PlayService getService() {
-            return PlayService.this;
-        }
-    }
-
-    public class PlayServiceReceiver extends BroadcastReceiver {
+    public static class PlayServiceReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
 

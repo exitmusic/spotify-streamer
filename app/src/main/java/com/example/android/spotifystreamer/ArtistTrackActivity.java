@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrackActivityFragment.Callback {
 
+    private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +95,7 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         // To make it fullscreen, use the 'content' root view as the container
         // for the fragment, which is always the root view for the activity
-        transaction.add(R.id.artist_tracks_container, fragment)
+        transaction.add(R.id.artist_tracks_container, fragment, PLAYACTIVITYFRAGMENT_TAG)
                 .addToBackStack(null).commit();
     }
 }
