@@ -35,7 +35,6 @@
                 android:value=".ArtistTrackActivity" />
         </activity>
         <service android:name=".service.PlayService"/>
-        <receiver android:name=".MainActivity$PlayActivityReceiver" android:enabled="true"/>
         <receiver android:name=".service.PlayService$PlayServiceReceiver" android:enabled="true"/>
     </application>
 
