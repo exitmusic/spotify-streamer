@@ -31,6 +31,7 @@ public class ArtistTrackActivityFragment extends Fragment {
     static final String ARTIST_NAME = "ARTIST_NAME";
 
     private ArtistTrackAdapter mArtistTrackAdapter;
+    private ArrayList<String> mPlaylist;
     private String mArtistId;
 
     /**

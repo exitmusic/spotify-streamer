@@ -109,13 +109,13 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
         @Override
         public void onReceive(Context context, Intent intent) {
             String playAction = intent.getAction();
-            PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
+            PlayActivityFragment playFragment = (PlayActivityFragment) mFragmentManager
                     .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
 
-            if (paf != null) {
+            if (playFragment != null) {
                 switch (playAction) {
                     case PlayActivityFragment.TRACK_PLAY:
-                        paf.startSeekBar();
+                        playFragment.startSeekBar();
                         break;
                     case PlayActivityFragment.TRACK_PAUSE:
                         break;

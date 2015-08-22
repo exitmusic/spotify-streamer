@@ -70,7 +70,6 @@ public class PlayService extends Service implements
             Intent intent = new Intent();
 
             intent.setAction(PlayActivityFragment.TRACK_PLAY);
-            intent.putExtra(Intent.ACTION_CALL, PlayActivityFragment.TRACK_PLAY);
             sendBroadcast(intent);
             //mp.getCurrentPosition()
         }

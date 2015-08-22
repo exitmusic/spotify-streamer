@@ -46,6 +46,7 @@ public class PlayActivityFragment extends DialogFragment {
     private ImageView mPlayPause;
     private ImageView mNext;
 
+    private Thread seekBarThread;
 
     public PlayActivityFragment() {
     }
@@ -102,20 +103,46 @@ public class PlayActivityFragment extends DialogFragment {
         mPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
 
+                intent.setAction(PlayActivityFragment.TRACK_PREVIOUS);
+                getActivity().sendBroadcast(intent);
             }
         });
 
         mPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
 
+                intent.setAction(PlayActivityFragment.TRACK_PAUSE);
+                getActivity().sendBroadcast(intent);
             }
         });
 
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+
+                intent.setAction(PlayActivityFragment.TRACK_NEXT);
+                getActivity().sendBroadcast(intent);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
