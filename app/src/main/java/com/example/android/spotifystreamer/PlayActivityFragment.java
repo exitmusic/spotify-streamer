@@ -55,6 +55,16 @@ public class PlayActivityFragment extends DialogFragment {
     public PlayActivityFragment() {
     }
 
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,7 +91,6 @@ public class PlayActivityFragment extends DialogFragment {
 
         // Use preview track url to play track
         if (previewUrl != null) {
-            initMediaPlayer();
             mMediaPlayer.reset();
 
             try {
@@ -100,14 +109,6 @@ public class PlayActivityFragment extends DialogFragment {
         }
 
         return rootView;
-    }
-
-    private void initMediaPlayer() {
-        if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
-        }
-
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     private void getViews(View rootView) {
@@ -181,8 +182,9 @@ public class PlayActivityFragment extends DialogFragment {
         return dialog;
     }
 
-    public void startSeekBar() {
-        int progress = mSeekBar.getProgress();
-        mSeekBar.setProgress(progress + 1);
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMediaPlayer.release();
     }
 }

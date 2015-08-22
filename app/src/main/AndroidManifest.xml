@@ -34,20 +34,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ArtistTrackActivity" />
         </activity>
-        <service android:name=".service.PlayService"/>
-        <receiver android:name=".MainActivity$PlayActivityReceiver" android:enabled="true">
-            <intent-filter>
-                <action android:name="PLAY"/>
-                <category android:name="android.intent.category.default"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".ArtistTrackActivity$PlayActivityReceiver" android:enabled="true">
-            <intent-filter>
-                <action android:name="PLAY"/>
-                <category android:name="android.intent.category.default"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".service.PlayService$PlayServiceReceiver" android:enabled="true"/>
+
     </application>
 
 </manifest>
