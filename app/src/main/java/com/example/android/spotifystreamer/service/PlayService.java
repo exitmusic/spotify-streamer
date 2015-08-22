@@ -33,6 +33,7 @@ public class PlayService extends Service implements
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnErrorListener(this);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -40,9 +41,7 @@ public class PlayService extends Service implements
         super.onStartCommand(intent, flags, startId);
 
         String previewUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-        // Prepare and start media player
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.reset();
 
         try {
             mMediaPlayer.setDataSource(previewUrl);
@@ -75,6 +74,15 @@ public class PlayService extends Service implements
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    }
+
     public void setPlaylist(ArrayList<String> pl) {
         playlist = pl;
     }
@@ -88,7 +96,7 @@ public class PlayService extends Service implements
     public class PlayReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            
+
         }
     }
 }
