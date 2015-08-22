@@ -2,7 +2,6 @@ package com.example.android.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,16 +11,13 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
-    private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
 
     private boolean mTwoPane;
-    private static FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mFragmentManager = getSupportFragmentManager();
 
         if (findViewById(R.id.artist_tracks_container) != null) {
             // The artists tracks container will only be present in two-pane mode
@@ -66,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
             ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
             fragment.setArguments(args);
 
-            mFragmentManager.beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.artist_tracks_container, fragment, ARTISTTRACKFRAGMENT_TAG)
                     .commit();
         } else {
