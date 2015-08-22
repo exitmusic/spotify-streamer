@@ -55,42 +55,31 @@ public class PlayActivityFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         Bundle args = getArguments();
-        //Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
 
-        String artistName = "";
-        String albumName = "";
-        String coverUrl = "";
-        String trackName = "";
-        String previewUrl = "";
+        String artistName = args.getString(ARTIST_NAME);
+        String albumName = args.getString(ALBUM);
+        String coverUrl = args.getString(COVER_URL);
+        String trackName = args.getString(TRACK_NAME);
+        String previewUrl = args.getString(PREVIEW_URL);
 
         getViews(rootView);
         setPlayControls();
-
-        if (args != null) {
-            artistName = args.getString(ARTIST_NAME);
-            albumName = args.getString(ALBUM);
-            coverUrl = args.getString(COVER_URL);
-            trackName = args.getString(TRACK_NAME);
-            previewUrl = args.getString(PREVIEW_URL);
-
-            mArtistNameView.setText(artistName);
-            mAlbumNameView.setText(albumName);
-            Picasso.with(getActivity()).load(coverUrl).into(mCoverView);
-            mTrackNameView.setText(trackName);
-            mSeekBar.setMax(30);
-            mTrackDurationStartView.setText("0:00");
-            mTrackDurationEndView.setText("0:30");
-        }
-
+        mArtistNameView.setText(artistName);
+        mAlbumNameView.setText(albumName);
+        Picasso.with(getActivity()).load(coverUrl).into(mCoverView);
+        mTrackNameView.setText(trackName);
+        mSeekBar.setMax(30);
+        mTrackDurationStartView.setText("0:00");
+        mTrackDurationEndView.setText("0:30");
 
 
         // Use preview track url to play track
         if (previewUrl != null) {
-            Intent playIntent = new Intent(getActivity(), PlayService.class);
+            Intent intent = new Intent(getActivity(), PlayService.class);
 
-            playIntent.putExtra(Intent.EXTRA_TEXT, previewUrl);
-            getActivity().startService(playIntent);
+            intent.putExtra(Intent.EXTRA_TEXT, previewUrl);
+            getActivity().startService(intent);
         }
 
         return rootView;
@@ -142,7 +131,7 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     public void startSeekBar() {
-        int progress = mSeekBar.getProgress();
-        mSeekBar.setProgress(progress + 1);
+//        int progress = mSeekBar.getProgress();
+//        mSeekBar.setProgress(progress + 1);
     }
 }

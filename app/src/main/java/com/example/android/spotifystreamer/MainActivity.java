@@ -1,5 +1,7 @@
 package com.example.android.spotifystreamer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity implements SearchArtistFragment.Callback {
+public class MainActivity extends ActionBarActivity
+        implements SearchArtistFragment.Callback, ArtistTrackActivityFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String ARTISTTRACKFRAGMENT_TAG = "ATFTAG";
@@ -77,53 +80,53 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
         }
     }
 
-//    @Override
-//    public void onTrackSelected(
-//            String artistName,
-//            String album,
-//            String cover,
-//            String track,
-//            Long duration,
-//            String previewUrl) {
-//
-//        //FragmentManager fragmentManager = getSupportFragmentManager();
-//        PlayActivityFragment fragment = new PlayActivityFragment();
-//        Bundle args = new Bundle();
-//
-//        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
-//        args.putString(PlayActivityFragment.ALBUM, album);
-//        args.putString(PlayActivityFragment.COVER_URL, cover);
-//        args.putString(PlayActivityFragment.TRACK_NAME, track);
-//        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
-//        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
-//        fragment.setArguments(args);
-//
-//        // The device is using a large layout, so show the fragment as a dialog
-//        fragment.show(mFragmentManager, PLAYACTIVITYFRAGMENT_TAG);
-//
-//    }
+    @Override
+    public void onTrackSelected(
+            String artistName,
+            String album,
+            String cover,
+            String track,
+            Long duration,
+            String previewUrl) {
 
-//    public static class PlayActivityReceiver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            int playAction = intent.getIntExtra(Intent.ACTION_CALL, -1);
-//            PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
-//                    .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
-//
-//            if (paf != null) {
-//                switch (playAction) {
-//                    case PlayActivityFragment.TRACK_PLAY:
-//                        paf.startSeekBar();
-//                        break;
-//                    case PlayActivityFragment.TRACK_PAUSE:
-//                        break;
-//                    case PlayActivityFragment.TRACK_PREVIOUS:
-//                        break;
-//                    case PlayActivityFragment.TRACK_NEXT:
-//                        break;
-//                }
-//            }
-//
-//        }
-//    }
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        PlayActivityFragment fragment = new PlayActivityFragment();
+        Bundle args = new Bundle();
+
+        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
+        args.putString(PlayActivityFragment.ALBUM, album);
+        args.putString(PlayActivityFragment.COVER_URL, cover);
+        args.putString(PlayActivityFragment.TRACK_NAME, track);
+        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
+        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
+        fragment.setArguments(args);
+
+        // The device is using a large layout, so show the fragment as a dialog
+        fragment.show(mFragmentManager, PLAYACTIVITYFRAGMENT_TAG);
+
+    }
+
+    public static class PlayActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int playAction = intent.getIntExtra(Intent.ACTION_CALL, -1);
+            PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
+                    .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
+
+            if (paf != null) {
+                switch (playAction) {
+                    case PlayActivityFragment.TRACK_PLAY:
+                        paf.startSeekBar();
+                        break;
+                    case PlayActivityFragment.TRACK_PAUSE:
+                        break;
+                    case PlayActivityFragment.TRACK_PREVIOUS:
+                        break;
+                    case PlayActivityFragment.TRACK_NEXT:
+                        break;
+                }
+            }
+
+        }
+    }
 }
