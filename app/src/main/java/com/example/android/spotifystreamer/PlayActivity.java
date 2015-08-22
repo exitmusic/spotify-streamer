@@ -10,9 +10,6 @@ import android.view.MenuItem;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = PlayActivity.class.getSimpleName();
-    private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +22,7 @@ public class PlayActivity extends AppCompatActivity {
         String trackName = intent.getStringExtra(PlayActivityFragment.TRACK_NAME);
         String previewUrl = intent.getStringExtra(PlayActivityFragment.PREVIEW_URL);
 
-        if (savedInstanceState == null) {
+        //if (savedInstanceState == null) {
             PlayActivityFragment fragment = new PlayActivityFragment();
             Bundle args = new Bundle();
 
@@ -39,17 +36,12 @@ public class PlayActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, fragment, "PLAYACTIVITYFRAGMENT_TAG").commit();
+            //fragment.show(fragmentManager, "PLAYACTIVITYFRAGMENT_TAG");
 
-            if (mTwoPane) {
-                fragment.show(fragmentManager, "PLAYACTIVITYFRAGMENT_TAG");
-            } else {
-                // To make it fullscreen, use the 'content' root view as the container
-                // for the fragment, which is always the root view for the activity
-                transaction.add(R.id.play_container, fragment, PLAYACTIVITYFRAGMENT_TAG)
-                        .addToBackStack(null).commit();
-            }
-
-        }
+        //}
 
 //        // The device is using a large layout, so show the fragment as a dialog
 //        fragment.show(mFragmentManager, PLAYACTIVITYFRAGMENT_TAG);
