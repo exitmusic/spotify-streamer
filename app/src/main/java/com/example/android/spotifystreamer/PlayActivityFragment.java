@@ -30,10 +30,10 @@ public class PlayActivityFragment extends DialogFragment {
     static final String TRACK_DURATION = "TRACK_DURATION";
     static final String PREVIEW_URL = "PREVIEW_URL";
 
-    public static final int TRACK_PLAY = 0;
-    public static final int TRACK_PAUSE = 1;
-    public static final int TRACK_PREVIOUS = 2;
-    public static final int TRACK_NEXT = 3;
+    public static final String TRACK_PLAY = "PLAY";
+    public static final String TRACK_PAUSE = "PAUSE";
+    public static final String TRACK_PREVIOUS = "PREVIOUS";
+    public static final String TRACK_NEXT = "NEXT";
 
     private TextView mArtistNameView;
     private TextView mAlbumNameView;
@@ -131,7 +131,7 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     public void startSeekBar() {
-//        int progress = mSeekBar.getProgress();
-//        mSeekBar.setProgress(progress + 1);
+        int progress = mSeekBar.getProgress();
+        mSeekBar.setProgress(progress + 1);
     }
 }

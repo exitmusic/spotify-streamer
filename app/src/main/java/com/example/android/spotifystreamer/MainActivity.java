@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity
     public static class PlayActivityReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int playAction = intent.getIntExtra(Intent.ACTION_CALL, -1);
+            String playAction = intent.getAction();
             PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
                     .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
 

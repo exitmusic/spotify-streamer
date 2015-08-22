@@ -1,7 +1,10 @@
 package com.example.android.spotifystreamer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -13,10 +16,13 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
 
     private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
 
+    private static FragmentManager mFragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_track);
+        mFragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
         String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -41,7 +47,7 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
             ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
             fragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction()
+            mFragmentManager.beginTransaction()
                     .add(R.id.artist_tracks_container, fragment)
                     .commit();
         }
@@ -90,12 +96,36 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
         fragment.setArguments(args);
 
         // The device is smaller, so show the fragment fullscreen
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
         // For a little polish, specify a transition animation
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         // To make it fullscreen, use the 'content' root view as the container
         // for the fragment, which is always the root view for the activity
         transaction.add(R.id.artist_tracks_container, fragment, PLAYACTIVITYFRAGMENT_TAG)
                 .addToBackStack(null).commit();
+    }
+
+    public static class PlayActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String playAction = intent.getAction();
+            PlayActivityFragment paf = (PlayActivityFragment) mFragmentManager
+                    .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
+
+            if (paf != null) {
+                switch (playAction) {
+                    case PlayActivityFragment.TRACK_PLAY:
+                        paf.startSeekBar();
+                        break;
+                    case PlayActivityFragment.TRACK_PAUSE:
+                        break;
+                    case PlayActivityFragment.TRACK_PREVIOUS:
+                        break;
+                    case PlayActivityFragment.TRACK_NEXT:
+                        break;
+                }
+            }
+
+        }
     }
 }
