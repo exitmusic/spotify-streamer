@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +29,6 @@ public class PlayActivityFragment extends DialogFragment {
 
     private static final String LOG_TAG = PlayActivityFragment.class.getSimpleName();
 
-//    static final String ARTIST_NAME = "ARTIST_NAME";
-//    static final String ALBUM = "ALBUM";
-//    static final String COVER_URL = "COVER_URL";
-//    static final String TRACK_NAME = "TRACK_NAME";
-//    static final String TRACK_DURATION = "TRACK_DURATION";
-//    static final String PREVIEW_URL = "PREVIEW_URL";
     static final String PARCEL_TRACK = "PARCEL_TRACK";
     static final String PLAYLIST = "PLAYLIST";
     static final String POSITION = "POSITION";
@@ -57,6 +53,8 @@ public class PlayActivityFragment extends DialogFragment {
     private ParcelableTrack mNowPlaying;
     private ArrayList<ParcelableTrack> mPlaylist;
     private int mPosition;
+    private Handler mHandler = new Handler();
+    private boolean mIsPreparing = false;
 
     public PlayActivityFragment() {
     }
@@ -105,12 +103,7 @@ public class PlayActivityFragment extends DialogFragment {
         mPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition > 0) {
-                    mPosition = mPosition - 1;
-                    mNowPlaying = mPlaylist.get(mPosition);
-                    loadTrackDetails();
-                    prepareMediaPlayer();
-                }
+                loadPreviousTrack();
             }
         });
 
@@ -123,6 +116,7 @@ public class PlayActivityFragment extends DialogFragment {
                 } else {
                     mMediaPlayer.start();
                     mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                    updateSeekBar();
                 }
             }
         });
@@ -130,12 +124,7 @@ public class PlayActivityFragment extends DialogFragment {
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition < mPlaylist.size()-1) {
-                    mPosition = mPosition + 1;
-                    mNowPlaying = mPlaylist.get(mPosition);
-                    loadTrackDetails();
-                    prepareMediaPlayer();
-                }
+                loadNextTrack();
             }
         });
 
@@ -159,7 +148,9 @@ public class PlayActivityFragment extends DialogFragment {
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                mIsPreparing = false;
                 mp.start();
+                updateSeekBar();
                 mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
             }
         });
@@ -168,6 +159,13 @@ public class PlayActivityFragment extends DialogFragment {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mPlayPause.setImageResource(android.R.drawable.ic_media_play);
+            }
+        });
+
+        mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                return false;
             }
         });
     }
@@ -179,7 +177,7 @@ public class PlayActivityFragment extends DialogFragment {
             Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
         }
         mTrackNameView.setText(mNowPlaying.trackName);
-        mSeekBar.setMax(30);
+        mSeekBar.setMax(30000);
         mTrackDurationStartView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
     }
@@ -188,14 +186,60 @@ public class PlayActivityFragment extends DialogFragment {
         // Use preview track url to play track
         if (mNowPlaying.previewUrl != null) {
             mMediaPlayer.reset();
+            resetSeekBar();
 
             try {
                 mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
                 mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+                mIsPreparing = true;
             } catch (IOException e) {
-
+                Log.e(LOG_TAG, e.getMessage());
             }
         }
+    }
+
+    private void loadTrack() {
+        if (!mIsPreparing) {
+            mMediaPlayer.stop();
+        }
+        loadTrackDetails();
+        prepareMediaPlayer();
+    }
+
+    private void loadNextTrack() {
+        if (mPosition < mPlaylist.size() - 1) {
+            mPosition = mPosition + 1;
+            mNowPlaying = mPlaylist.get(mPosition);
+            loadTrack();
+        }
+    }
+
+    private void loadPreviousTrack() {
+        if (mPosition > 0) {
+            mPosition = mPosition - 1;
+            mNowPlaying = mPlaylist.get(mPosition);
+            loadTrack();
+        }
+    }
+
+    private void resetSeekBar() {
+        mSeekBar.setProgress(0);
+    }
+
+    private void updateSeekBar() {
+        //int currentProgress = mSeekBar.getProgress();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+
+                if (mMediaPlayer.isPlaying()) {
+                    mHandler.postDelayed(this, 1000);
+                }
+            }
+        };
+
+        mHandler.postDelayed(r, 1000);
     }
 
     @NonNull
@@ -203,6 +247,7 @@ public class PlayActivityFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
         return dialog;
     }
