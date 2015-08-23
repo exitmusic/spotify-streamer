@@ -33,11 +33,6 @@ public class PlayActivityFragment extends DialogFragment {
     static final String PLAYLIST = "PLAYLIST";
     static final String POSITION = "POSITION";
 
-    public static final String TRACK_PLAY = "PLAY";
-    public static final String TRACK_PAUSE = "PAUSE";
-    public static final String TRACK_PREVIOUS = "PREVIOUS";
-    public static final String TRACK_NEXT = "NEXT";
-
     private TextView mArtistNameView;
     private TextView mAlbumNameView;
     private ImageView mCoverView;
