@@ -38,7 +38,7 @@ public class PlayActivityFragment extends DialogFragment {
     private ImageView mCoverView;
     private TextView mTrackNameView;
     private SeekBar mSeekBar;
-    private TextView mTrackDurationStartView;
+    private TextView mTrackDurationProgressView;
     private TextView mTrackDurationEndView;
     private ImageView mPrevious;
     private ImageView mPlayPause;
@@ -88,7 +88,7 @@ public class PlayActivityFragment extends DialogFragment {
         mCoverView = (ImageView) rootView.findViewById(R.id.play_album_cover);
         mTrackNameView = (TextView) rootView.findViewById(R.id.play_track_name);
         mSeekBar = (SeekBar) rootView.findViewById(R.id.play_track_seekbar);
-        mTrackDurationStartView = (TextView) rootView.findViewById(R.id.play_track_duration_start);
+        mTrackDurationProgressView = (TextView) rootView.findViewById(R.id.play_track_duration_progress);
         mTrackDurationEndView = (TextView) rootView.findViewById(R.id.play_track_duration_end);
         mPrevious = (ImageView) rootView.findViewById(R.id.play_previous_icon);
         mPlayPause = (ImageView) rootView.findViewById(R.id.play_pause_play_icon);
@@ -127,7 +127,9 @@ public class PlayActivityFragment extends DialogFragment {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                String time = String.format("0:%02d", progress / 1000);
 
+                mTrackDurationProgressView.setText(time);
             }
 
             @Override
@@ -174,7 +176,7 @@ public class PlayActivityFragment extends DialogFragment {
         }
         mTrackNameView.setText(mNowPlaying.trackName);
         mSeekBar.setMax(30000);
-        mTrackDurationStartView.setText("0:00");
+        mTrackDurationProgressView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
     }
 
@@ -223,11 +225,13 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     private void updateSeekBar() {
-        //int currentProgress = mSeekBar.getProgress();
-
         r = new Runnable() {
             public void run() {
-                mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                int timeMs = mMediaPlayer.getCurrentPosition();
+                String progress = String.format("0:%02d", timeMs/1000);
+
+                mSeekBar.setProgress(timeMs);
+                mTrackDurationProgressView.setText(progress);
 
                 if (mMediaPlayer.isPlaying()) {
                     mHandler.postDelayed(this, 500);

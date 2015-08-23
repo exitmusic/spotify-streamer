@@ -41,7 +41,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/play_track_duration_start"
+            android:id="@+id/play_track_duration_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
