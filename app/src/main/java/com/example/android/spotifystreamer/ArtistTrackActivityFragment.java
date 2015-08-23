@@ -1,5 +1,8 @@
 package com.example.android.spotifystreamer;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -99,10 +102,20 @@ public class ArtistTrackActivityFragment extends Fragment {
         return rootView;
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private void getTopTracks(String artistId) {
         TopTracksTask tracksTask = new TopTracksTask();
 
-        tracksTask.execute(artistId);
+        // Check if network is available before searching for top tracks
+        if (isNetworkAvailable()) {
+            tracksTask.execute(artistId);
+        }
     }
 
     private class TopTracksTask extends AsyncTask<String, Void, Tracks> {

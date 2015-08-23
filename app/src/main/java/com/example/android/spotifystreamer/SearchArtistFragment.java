@@ -1,5 +1,8 @@
 package com.example.android.spotifystreamer;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,7 +68,11 @@ public class SearchArtistFragment extends Fragment {
                 SearchArtistsTask searchArtistsTask = new SearchArtistsTask();
 
                 mToast = Toast.makeText(getActivity(), query + " not found.", Toast.LENGTH_SHORT);
-                searchArtistsTask.execute(query);
+
+                // Check if network is available first before executing query
+                if (isNetworkAvailable()) {
+                    searchArtistsTask.execute(query);
+                }
                 return true;
             }
 
@@ -93,6 +100,13 @@ public class SearchArtistFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private class SearchArtistsTask extends AsyncTask<String, Void, ArtistsPager> {
