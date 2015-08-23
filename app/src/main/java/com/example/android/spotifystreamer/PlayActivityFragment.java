@@ -1,7 +1,6 @@
 package com.example.android.spotifystreamer;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.android.spotifystreamer.data.ParcelableTrack;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -76,45 +76,16 @@ public class PlayActivityFragment extends DialogFragment {
         Bundle args = getArguments();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
 
-//        String artistName = args.getString(ARTIST_NAME);
-//        String albumName = args.getString(ALBUM);
-//        String coverUrl = args.getString(COVER_URL);
-//        String trackName = args.getString(TRACK_NAME);
-//        String previewUrl = args.getString(PREVIEW_URL);
-
         mNowPlaying = args.getParcelable(PARCEL_TRACK);
         mPlaylist = args.getParcelableArrayList(PLAYLIST);
         mPosition = args.getInt(POSITION);
 
         getViews(rootView);
-        loadTrackDetails();
         setPlayControls();
-
-        // Use preview track url to play track
-        if (mNowPlaying.previewUrl != null) {
-            mMediaPlayer.reset();
-
-            try {
-                mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
-                mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
-            } catch (IOException e) {
-
-            }
-        }
+        loadTrackDetails();
+        prepareMediaPlayer();
 
         return rootView;
-    }
-
-    private void loadTrackDetails() {
-        mArtistNameView.setText(mNowPlaying.artistName);
-        mAlbumNameView.setText(mNowPlaying.albumName);
-        if (mNowPlaying.coverUrl != "") {
-            Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
-        }
-        mTrackNameView.setText(mNowPlaying.trackName);
-        mSeekBar.setMax(30);
-        mTrackDurationStartView.setText("0:00");
-        mTrackDurationEndView.setText("0:30");
     }
 
     private void getViews(View rootView) {
@@ -134,10 +105,12 @@ public class PlayActivityFragment extends DialogFragment {
         mPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-
-                intent.setAction(PlayActivityFragment.TRACK_PREVIOUS);
-                getActivity().sendBroadcast(intent);
+                if (mPosition > 0) {
+                    mPosition = mPosition - 1;
+                    mNowPlaying = mPlaylist.get(mPosition);
+                    loadTrackDetails();
+                    prepareMediaPlayer();
+                }
             }
         });
 
@@ -157,10 +130,12 @@ public class PlayActivityFragment extends DialogFragment {
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-
-                intent.setAction(PlayActivityFragment.TRACK_NEXT);
-                getActivity().sendBroadcast(intent);
+                if (mPosition < mPlaylist.size()-1) {
+                    mPosition = mPosition + 1;
+                    mNowPlaying = mPlaylist.get(mPosition);
+                    loadTrackDetails();
+                    prepareMediaPlayer();
+                }
             }
         });
 
@@ -195,6 +170,32 @@ public class PlayActivityFragment extends DialogFragment {
                 mPlayPause.setImageResource(android.R.drawable.ic_media_play);
             }
         });
+    }
+
+    private void loadTrackDetails() {
+        mArtistNameView.setText(mNowPlaying.artistName);
+        mAlbumNameView.setText(mNowPlaying.albumName);
+        if (mNowPlaying.coverUrl != "") {
+            Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
+        }
+        mTrackNameView.setText(mNowPlaying.trackName);
+        mSeekBar.setMax(30);
+        mTrackDurationStartView.setText("0:00");
+        mTrackDurationEndView.setText("0:30");
+    }
+
+    private void prepareMediaPlayer() {
+        // Use preview track url to play track
+        if (mNowPlaying.previewUrl != null) {
+            mMediaPlayer.reset();
+
+            try {
+                mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
+                mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+            } catch (IOException e) {
+
+            }
+        }
     }
 
     @NonNull

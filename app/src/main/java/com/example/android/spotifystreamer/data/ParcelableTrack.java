@@ -1,4 +1,4 @@
-package com.example.android.spotifystreamer;
+package com.example.android.spotifystreamer.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
