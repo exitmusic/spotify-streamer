@@ -9,8 +9,6 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.example.android.spotifystreamer.PlayActivityFragment;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -69,7 +67,7 @@ public class PlayService extends Service implements
         if (mp.isPlaying()) {
             Intent intent = new Intent();
 
-            intent.setAction(PlayActivityFragment.TRACK_PLAY);
+            //intent.setAction(PlayActivityFragment.TRACK_PLAY);
             sendBroadcast(intent);
             //mp.getCurrentPosition()
         }

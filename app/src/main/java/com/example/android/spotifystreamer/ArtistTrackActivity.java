@@ -1,28 +1,29 @@
 package com.example.android.spotifystreamer;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.spotifystreamer.data.ParcelableTrack;
+
+import java.util.ArrayList;
+
 
 public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrackActivityFragment.Callback {
 
     private static final String PLAYACTIVITYFRAGMENT_TAG = "PAFTAG";
 
-    private static FragmentManager mFragmentManager;
+    //private static FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_track);
-        mFragmentManager = getSupportFragmentManager();
+        //mFragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
         String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -47,7 +48,7 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
             ArtistTrackActivityFragment fragment = new ArtistTrackActivityFragment();
             fragment.setArguments(args);
 
-            mFragmentManager.beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.artist_tracks_container, fragment)
                     .commit();
         }
@@ -76,56 +77,29 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
     }
 
     @Override
-    public void onTrackSelected(
-            String artistName,
-            String album,
-            String cover,
-            String track,
-            Long duration,
-            String previewUrl) {
+    public void onTrackSelected(ParcelableTrack track, ArrayList<ParcelableTrack> playlist, int pos) {
 
         PlayActivityFragment fragment = new PlayActivityFragment();
         Bundle args = new Bundle();
 
-        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
-        args.putString(PlayActivityFragment.ALBUM, album);
-        args.putString(PlayActivityFragment.COVER_URL, cover);
-        args.putString(PlayActivityFragment.TRACK_NAME, track);
-        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
-        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
+        args.putParcelable(PlayActivityFragment.PARCEL_TRACK, track);
+        args.putParcelableArrayList(PlayActivityFragment.PLAYLIST, playlist);
+        args.putInt(PlayActivityFragment.POSITION, pos);
+//        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
+//        args.putString(PlayActivityFragment.ALBUM, album);
+//        args.putString(PlayActivityFragment.COVER_URL, cover);
+//        args.putString(PlayActivityFragment.TRACK_NAME, track);
+//        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
+//        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
         fragment.setArguments(args);
 
         // The device is smaller, so show the fragment fullscreen
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // For a little polish, specify a transition animation
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         // To make it fullscreen, use the 'content' root view as the container
         // for the fragment, which is always the root view for the activity
         transaction.add(R.id.artist_tracks_container, fragment, PLAYACTIVITYFRAGMENT_TAG)
                 .addToBackStack(null).commit();
-    }
-
-    public static class PlayActivityReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String playAction = intent.getAction();
-            PlayActivityFragment playFragment = (PlayActivityFragment) mFragmentManager
-                    .findFragmentByTag(PLAYACTIVITYFRAGMENT_TAG);
-
-            if (playFragment != null) {
-                switch (playAction) {
-                    case PlayActivityFragment.TRACK_PLAY:
-                        playFragment.startSeekBar();
-                        break;
-                    case PlayActivityFragment.TRACK_PAUSE:
-                        break;
-                    case PlayActivityFragment.TRACK_PREVIOUS:
-                        break;
-                    case PlayActivityFragment.TRACK_NEXT:
-                        break;
-                }
-            }
-
-        }
     }
 }
