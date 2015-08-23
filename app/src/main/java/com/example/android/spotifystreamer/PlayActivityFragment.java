@@ -54,6 +54,7 @@ public class PlayActivityFragment extends DialogFragment {
     private ArrayList<ParcelableTrack> mPlaylist;
     private int mPosition;
     private Handler mHandler = new Handler();
+    private Runnable r;
     private boolean mIsPreparing = false;
 
     public PlayActivityFragment() {
@@ -229,17 +230,17 @@ public class PlayActivityFragment extends DialogFragment {
     private void updateSeekBar() {
         //int currentProgress = mSeekBar.getProgress();
 
-        final Runnable r = new Runnable() {
+        r = new Runnable() {
             public void run() {
                 mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
 
                 if (mMediaPlayer.isPlaying()) {
-                    mHandler.postDelayed(this, 1000);
+                    mHandler.postDelayed(this, 500);
                 }
             }
         };
 
-        mHandler.postDelayed(r, 1000);
+        mHandler.postDelayed(r, 500);
     }
 
     @NonNull
@@ -255,6 +256,7 @@ public class PlayActivityFragment extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
+        mHandler.removeCallbacks(r);
         mMediaPlayer.release();
     }
 }
