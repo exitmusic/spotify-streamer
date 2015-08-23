@@ -79,25 +79,20 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onTrackSelected(
-            String artistName,
-            String album,
-            String cover,
-            String track,
-            Long duration,
-            String previewUrl) {
+    public void onTrackSelected(ParcelableTrack track) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         PlayActivityFragment fragment = new PlayActivityFragment();
 
         Bundle args = new Bundle();
 
-        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
-        args.putString(PlayActivityFragment.ALBUM, album);
-        args.putString(PlayActivityFragment.COVER_URL, cover);
-        args.putString(PlayActivityFragment.TRACK_NAME, track);
-        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
-        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
+        args.putParcelable(PlayActivityFragment.PARCEL_TRACK, track);
+//        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
+//        args.putString(PlayActivityFragment.ALBUM, album);
+//        args.putString(PlayActivityFragment.COVER_URL, cover);
+//        args.putString(PlayActivityFragment.TRACK_NAME, track);
+//        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
+//        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
         fragment.setArguments(args);
 
         // The device is using a large layout, so show the fragment as a dialog

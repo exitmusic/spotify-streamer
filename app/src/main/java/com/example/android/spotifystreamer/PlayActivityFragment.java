@@ -32,6 +32,7 @@ public class PlayActivityFragment extends DialogFragment {
     static final String TRACK_NAME = "TRACK_NAME";
     static final String TRACK_DURATION = "TRACK_DURATION";
     static final String PREVIEW_URL = "PREVIEW_URL";
+    static final String PARCEL_TRACK = "PARCEL_TRACK";
 
     public static final String TRACK_PLAY = "PLAY";
     public static final String TRACK_PAUSE = "PAUSE";
@@ -69,29 +70,31 @@ public class PlayActivityFragment extends DialogFragment {
         Bundle args = getArguments();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
 
-        String artistName = args.getString(ARTIST_NAME);
-        String albumName = args.getString(ALBUM);
-        String coverUrl = args.getString(COVER_URL);
-        String trackName = args.getString(TRACK_NAME);
-        String previewUrl = args.getString(PREVIEW_URL);
+//        String artistName = args.getString(ARTIST_NAME);
+//        String albumName = args.getString(ALBUM);
+//        String coverUrl = args.getString(COVER_URL);
+//        String trackName = args.getString(TRACK_NAME);
+//        String previewUrl = args.getString(PREVIEW_URL);
+
+        ParcelableTrack track = args.getParcelable(PARCEL_TRACK);
 
         getViews(rootView);
         setPlayControls();
-        mArtistNameView.setText(artistName);
-        mAlbumNameView.setText(albumName);
-        Picasso.with(getActivity()).load(coverUrl).into(mCoverView);
-        mTrackNameView.setText(trackName);
+        mArtistNameView.setText(track.artistName);
+        mAlbumNameView.setText(track.albumName);
+        Picasso.with(getActivity()).load(track.coverUrl).into(mCoverView);
+        mTrackNameView.setText(track.trackName);
         mSeekBar.setMax(30);
         mTrackDurationStartView.setText("0:00");
         mTrackDurationEndView.setText("0:30");
 
 
         // Use preview track url to play track
-        if (previewUrl != null) {
+        if (track.previewUrl != null) {
             mMediaPlayer.reset();
 
             try {
-                mMediaPlayer.setDataSource(previewUrl);
+                mMediaPlayer.setDataSource(track.previewUrl);
                 mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
             } catch (IOException e) {
 

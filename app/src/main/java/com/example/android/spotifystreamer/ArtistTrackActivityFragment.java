@@ -43,14 +43,7 @@ public class ArtistTrackActivityFragment extends Fragment {
         /**
          * PlayCallback for when an item has been selected.
          */
-        void onTrackSelected(
-                String artistName,
-                String album,
-                String cover,
-                String track,
-                Long duration,
-                String previewUrl
-        );
+        void onTrackSelected(ParcelableTrack track);
     }
 
     public ArtistTrackActivityFragment() {
@@ -89,14 +82,15 @@ public class ArtistTrackActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Track track = mArtistTrackAdapter.getItem(position);
-
-                ((Callback) getActivity()).onTrackSelected(
+                ParcelableTrack pTrack = new ParcelableTrack(
                         track.artists.get(0).name,
                         track.album.name,
                         track.album.images.get(0).url,
                         track.name,
-                        track.duration_ms,
-                        track.preview_url);
+                        track.preview_url
+                );
+
+                ((Callback) getActivity()).onTrackSelected(pTrack);
             }
         });
 
