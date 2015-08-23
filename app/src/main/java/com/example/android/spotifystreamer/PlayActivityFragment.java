@@ -142,7 +142,7 @@ public class PlayActivityFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                mMediaPlayer.seekTo(seekBar.getProgress());
             }
         });
 
