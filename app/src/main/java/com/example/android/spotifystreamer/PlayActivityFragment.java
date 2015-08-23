@@ -104,6 +104,13 @@ public class PlayActivityFragment extends DialogFragment {
                     mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
                 }
             });
+
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                }
+            });
         }
 
         return rootView;
