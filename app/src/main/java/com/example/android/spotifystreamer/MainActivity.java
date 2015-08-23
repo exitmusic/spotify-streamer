@@ -93,12 +93,6 @@ public class MainActivity extends ActionBarActivity
         args.putParcelable(PlayActivityFragment.PARCEL_TRACK, track);
         args.putParcelableArrayList(PlayActivityFragment.PLAYLIST, playlist);
         args.putInt(PlayActivityFragment.POSITION, pos);
-//        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
-//        args.putString(PlayActivityFragment.ALBUM, album);
-//        args.putString(PlayActivityFragment.COVER_URL, cover);
-//        args.putString(PlayActivityFragment.TRACK_NAME, track);
-//        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
-//        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
         fragment.setArguments(args);
 
         // The device is using a large layout, so show the fragment as a dialog

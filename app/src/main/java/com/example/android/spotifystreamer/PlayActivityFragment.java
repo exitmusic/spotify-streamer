@@ -58,9 +58,9 @@ public class PlayActivityFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -142,6 +142,36 @@ public class PlayActivityFragment extends DialogFragment {
                 mMediaPlayer.seekTo(seekBar.getProgress());
             }
         });
+    }
+
+    private void loadTrackDetails() {
+        mArtistNameView.setText(mNowPlaying.artistName);
+        mAlbumNameView.setText(mNowPlaying.albumName);
+        if (mNowPlaying.coverUrl != "") {
+            Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
+        }
+        mTrackNameView.setText(mNowPlaying.trackName);
+        mSeekBar.setMax(30000);
+        mTrackDurationProgressView.setText("0:00");
+        mTrackDurationEndView.setText("0:30");
+    }
+
+    private void prepareMediaPlayer() {
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        // Use preview track url to play track
+        if (mNowPlaying.previewUrl != null) {
+            mMediaPlayer.reset();
+            resetSeekBar();
+
+            try {
+                mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
+                mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+                mIsPreparing = true;
+            } catch (IOException e) {
+                Log.e(LOG_TAG, e.getMessage());
+            }
+        }
 
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -166,34 +196,6 @@ public class PlayActivityFragment extends DialogFragment {
                 return false;
             }
         });
-    }
-
-    private void loadTrackDetails() {
-        mArtistNameView.setText(mNowPlaying.artistName);
-        mAlbumNameView.setText(mNowPlaying.albumName);
-        if (mNowPlaying.coverUrl != "") {
-            Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
-        }
-        mTrackNameView.setText(mNowPlaying.trackName);
-        mSeekBar.setMax(30000);
-        mTrackDurationProgressView.setText("0:00");
-        mTrackDurationEndView.setText("0:30");
-    }
-
-    private void prepareMediaPlayer() {
-        // Use preview track url to play track
-        if (mNowPlaying.previewUrl != null) {
-            mMediaPlayer.reset();
-            resetSeekBar();
-
-            try {
-                mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
-                mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
-                mIsPreparing = true;
-            } catch (IOException e) {
-                Log.e(LOG_TAG, e.getMessage());
-            }
-        }
     }
 
     private void loadTrack() {
