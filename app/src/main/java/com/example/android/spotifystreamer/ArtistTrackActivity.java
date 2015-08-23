@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 
 public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrackActivityFragment.Callback {
 
@@ -73,12 +75,14 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
     }
 
     @Override
-    public void onTrackSelected(ParcelableTrack track) {
+    public void onTrackSelected(ParcelableTrack track, ArrayList<ParcelableTrack> playlist, int pos) {
 
         PlayActivityFragment fragment = new PlayActivityFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(PlayActivityFragment.PARCEL_TRACK, track);
+        args.putParcelableArrayList(PlayActivityFragment.PLAYLIST, playlist);
+        args.putInt(PlayActivityFragment.POSITION, pos);
 //        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
 //        args.putString(PlayActivityFragment.ALBUM, album);
 //        args.putString(PlayActivityFragment.COVER_URL, cover);

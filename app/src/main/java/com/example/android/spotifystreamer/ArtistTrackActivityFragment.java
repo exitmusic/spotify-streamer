@@ -31,7 +31,7 @@ public class ArtistTrackActivityFragment extends Fragment {
     static final String ARTIST_NAME = "ARTIST_NAME";
 
     private ArtistTrackAdapter mArtistTrackAdapter;
-    private ArrayList<String> mPlaylist;
+    private ArrayList<ParcelableTrack> mPlaylist;
     private String mArtistId;
 
     /**
@@ -43,7 +43,7 @@ public class ArtistTrackActivityFragment extends Fragment {
         /**
          * PlayCallback for when an item has been selected.
          */
-        void onTrackSelected(ParcelableTrack track);
+        void onTrackSelected(ParcelableTrack track, ArrayList<ParcelableTrack> playlist, int pos);
     }
 
     public ArtistTrackActivityFragment() {
@@ -90,7 +90,7 @@ public class ArtistTrackActivityFragment extends Fragment {
                         track.preview_url
                 );
 
-                ((Callback) getActivity()).onTrackSelected(pTrack);
+                ((Callback) getActivity()).onTrackSelected(pTrack, mPlaylist, position);
             }
         });
 
@@ -127,10 +127,35 @@ public class ArtistTrackActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(Tracks tracks) {
             mArtistTrackAdapter.clear();
+            mPlaylist = new ArrayList<>();
 
             if (!tracks.tracks.isEmpty()) {
                 for (Track track : tracks.tracks) {
                     mArtistTrackAdapter.add(track);
+
+                    // Create playlist for PlayActivityFragment
+                    // Setting to empty string because certain tracks have null fields
+                    String artistName = "";
+                    String albumName = "";
+                    String coverUrl = "";
+                    String trackName = "";
+                    String previewUrl = "";
+
+                    artistName = track.artists.get(0).name;
+                    albumName = track.album.name;
+                    coverUrl = track.album.images.get(0).url;
+                    trackName = track.name;
+                    previewUrl = track.preview_url;
+
+                    ParcelableTrack pTrack = new ParcelableTrack(
+                            artistName,
+                            albumName,
+                            coverUrl,
+                            trackName,
+                            previewUrl
+                    );
+
+                    mPlaylist.add(pTrack);
                 }
             } else {
                 Toast.makeText(getActivity(), "No tracks available", Toast.LENGTH_SHORT).show();

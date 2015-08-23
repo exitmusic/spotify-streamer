@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -26,13 +27,15 @@ public class PlayActivityFragment extends DialogFragment {
 
     private static final String LOG_TAG = PlayActivityFragment.class.getSimpleName();
 
-    static final String ARTIST_NAME = "ARTIST_NAME";
-    static final String ALBUM = "ALBUM";
-    static final String COVER_URL = "COVER_URL";
-    static final String TRACK_NAME = "TRACK_NAME";
-    static final String TRACK_DURATION = "TRACK_DURATION";
-    static final String PREVIEW_URL = "PREVIEW_URL";
+//    static final String ARTIST_NAME = "ARTIST_NAME";
+//    static final String ALBUM = "ALBUM";
+//    static final String COVER_URL = "COVER_URL";
+//    static final String TRACK_NAME = "TRACK_NAME";
+//    static final String TRACK_DURATION = "TRACK_DURATION";
+//    static final String PREVIEW_URL = "PREVIEW_URL";
     static final String PARCEL_TRACK = "PARCEL_TRACK";
+    static final String PLAYLIST = "PLAYLIST";
+    static final String POSITION = "POSITION";
 
     public static final String TRACK_PLAY = "PLAY";
     public static final String TRACK_PAUSE = "PAUSE";
@@ -51,6 +54,9 @@ public class PlayActivityFragment extends DialogFragment {
     private ImageView mNext;
 
     private MediaPlayer mMediaPlayer;
+    private ParcelableTrack mNowPlaying;
+    private ArrayList<ParcelableTrack> mPlaylist;
+    private int mPosition;
 
     public PlayActivityFragment() {
     }
@@ -76,47 +82,39 @@ public class PlayActivityFragment extends DialogFragment {
 //        String trackName = args.getString(TRACK_NAME);
 //        String previewUrl = args.getString(PREVIEW_URL);
 
-        ParcelableTrack track = args.getParcelable(PARCEL_TRACK);
+        mNowPlaying = args.getParcelable(PARCEL_TRACK);
+        mPlaylist = args.getParcelableArrayList(PLAYLIST);
+        mPosition = args.getInt(POSITION);
 
         getViews(rootView);
+        loadTrackDetails();
         setPlayControls();
-        mArtistNameView.setText(track.artistName);
-        mAlbumNameView.setText(track.albumName);
-        Picasso.with(getActivity()).load(track.coverUrl).into(mCoverView);
-        mTrackNameView.setText(track.trackName);
-        mSeekBar.setMax(30);
-        mTrackDurationStartView.setText("0:00");
-        mTrackDurationEndView.setText("0:30");
-
 
         // Use preview track url to play track
-        if (track.previewUrl != null) {
+        if (mNowPlaying.previewUrl != null) {
             mMediaPlayer.reset();
 
             try {
-                mMediaPlayer.setDataSource(track.previewUrl);
+                mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
                 mMediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
             } catch (IOException e) {
 
             }
-
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
-                }
-            });
-
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mPlayPause.setImageResource(android.R.drawable.ic_media_play);
-                }
-            });
         }
 
         return rootView;
+    }
+
+    private void loadTrackDetails() {
+        mArtistNameView.setText(mNowPlaying.artistName);
+        mAlbumNameView.setText(mNowPlaying.albumName);
+        if (mNowPlaying.coverUrl != "") {
+            Picasso.with(getActivity()).load(mNowPlaying.coverUrl).into(mCoverView);
+        }
+        mTrackNameView.setText(mNowPlaying.trackName);
+        mSeekBar.setMax(30);
+        mTrackDurationStartView.setText("0:00");
+        mTrackDurationEndView.setText("0:30");
     }
 
     private void getViews(View rootView) {
@@ -180,6 +178,21 @@ public class PlayActivityFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+                mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mPlayPause.setImageResource(android.R.drawable.ic_media_play);
             }
         });
     }
