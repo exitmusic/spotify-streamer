@@ -51,11 +51,8 @@ public class PlayActivityFragment extends DialogFragment {
 
     private MediaPlayer mMediaPlayer;
 
-
     public PlayActivityFragment() {
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +101,7 @@ public class PlayActivityFragment extends DialogFragment {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
+                    mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
                 }
             });
         }
@@ -138,10 +136,13 @@ public class PlayActivityFragment extends DialogFragment {
         mPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-
-                intent.setAction(PlayActivityFragment.TRACK_PAUSE);
-                getActivity().sendBroadcast(intent);
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
+                    mPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                } else {
+                    mMediaPlayer.start();
+                    mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                }
             }
         });
 
