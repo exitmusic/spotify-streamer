@@ -253,6 +253,15 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+        }
+        //prepareMediaPlayer();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         mHandler.removeCallbacks(r);
