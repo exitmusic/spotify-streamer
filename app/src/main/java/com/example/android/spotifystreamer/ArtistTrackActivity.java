@@ -85,12 +85,6 @@ public class ArtistTrackActivity extends ActionBarActivity implements ArtistTrac
         args.putParcelable(PlayActivityFragment.PARCEL_TRACK, track);
         args.putParcelableArrayList(PlayActivityFragment.PLAYLIST, playlist);
         args.putInt(PlayActivityFragment.POSITION, pos);
-//        args.putString(PlayActivityFragment.ARTIST_NAME, artistName);
-//        args.putString(PlayActivityFragment.ALBUM, album);
-//        args.putString(PlayActivityFragment.COVER_URL, cover);
-//        args.putString(PlayActivityFragment.TRACK_NAME, track);
-//        args.putLong(PlayActivityFragment.TRACK_DURATION, duration);
-//        args.putString(PlayActivityFragment.PREVIEW_URL, previewUrl);
         fragment.setArguments(args);
 
         // The device is smaller, so show the fragment fullscreen
