@@ -58,9 +58,10 @@ public class PlayActivityFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
 
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
@@ -266,6 +267,6 @@ public class PlayActivityFragment extends DialogFragment {
     public void onPause() {
         super.onPause();
         mHandler.removeCallbacks(r);
-        mMediaPlayer.pause();
+        mMediaPlayer.stop();
     }
 }
