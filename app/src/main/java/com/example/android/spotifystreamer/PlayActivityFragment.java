@@ -61,6 +61,7 @@ public class PlayActivityFragment extends DialogFragment {
         setRetainInstance(true);
 
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -157,7 +158,7 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     private void prepareMediaPlayer() {
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
 
         // Use preview track url to play track
         if (mNowPlaying.previewUrl != null) {
@@ -193,6 +194,7 @@ public class PlayActivityFragment extends DialogFragment {
         mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.v(LOG_TAG, "In MediaPlayer.onError");
                 return false;
             }
         });
@@ -257,16 +259,13 @@ public class PlayActivityFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
-        }
-        //prepareMediaPlayer();
+        // Possible media player state handling here
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mHandler.removeCallbacks(r);
-        mMediaPlayer.release();
+        mMediaPlayer.pause();
     }
 }
