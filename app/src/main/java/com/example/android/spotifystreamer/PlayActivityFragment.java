@@ -31,7 +31,7 @@ public class PlayActivityFragment extends DialogFragment {
 
     static final String PARCEL_TRACK = "PARCEL_TRACK";
     static final String PLAYLIST = "PLAYLIST";
-    static final String POSITION = "POSITION";
+    static final String POSITION = "POSITION"; // Playlist position
     static final String SEEKBAR_POSITION = "SEEKBAR_POSITION";
 
     private TextView mArtistNameView;
@@ -62,11 +62,6 @@ public class PlayActivityFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         //setRetainInstance(true);
 
-        if (savedInstanceState != null) {
-            mSeekProgress = savedInstanceState.getInt(SEEKBAR_POSITION);
-        } else {
-            mSeekProgress = 0;
-        }
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -79,9 +74,18 @@ public class PlayActivityFragment extends DialogFragment {
         Bundle args = getArguments();
         View rootView = inflater.inflate(R.layout.fragment_play, container, false);
 
-        mNowPlaying = args.getParcelable(PARCEL_TRACK);
-        mPlaylist = args.getParcelableArrayList(PLAYLIST);
-        mPosition = args.getInt(POSITION);
+        // Resume playback of saved track
+        if (savedInstanceState != null) {
+            mPlaylist = savedInstanceState.getParcelableArrayList(PLAYLIST);
+            mPosition = savedInstanceState.getInt(POSITION);
+            mSeekProgress = savedInstanceState.getInt(SEEKBAR_POSITION);
+            mNowPlaying = mPlaylist.get(mPosition);
+        } else {
+            mSeekProgress = 0;
+            mNowPlaying = args.getParcelable(PARCEL_TRACK);
+            mPosition = args.getInt(POSITION);
+            mPlaylist = args.getParcelableArrayList(PLAYLIST);
+        }
 
         getViews(rootView);
         setPlayControls();
@@ -270,6 +274,8 @@ public class PlayActivityFragment extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(PLAYLIST, mPlaylist);
+        outState.putInt(POSITION, mPosition);
         outState.putInt(SEEKBAR_POSITION, mSeekProgress);
         super.onSaveInstanceState(outState);
     }
