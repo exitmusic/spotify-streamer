@@ -32,6 +32,7 @@ public class PlayActivityFragment extends DialogFragment {
     static final String PARCEL_TRACK = "PARCEL_TRACK";
     static final String PLAYLIST = "PLAYLIST";
     static final String POSITION = "POSITION";
+    static final String SEEKBAR_POSITION = "SEEKBAR_POSITION";
 
     private TextView mArtistNameView;
     private TextView mAlbumNameView;
@@ -51,6 +52,7 @@ public class PlayActivityFragment extends DialogFragment {
     private Handler mHandler = new Handler();
     private Runnable r;
     private boolean mIsPreparing = false;
+    private int mSeekProgress;
 
     public PlayActivityFragment() {
     }
@@ -60,6 +62,11 @@ public class PlayActivityFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         //setRetainInstance(true);
 
+        if (savedInstanceState != null) {
+            mSeekProgress = savedInstanceState.getInt(SEEKBAR_POSITION);
+        } else {
+            mSeekProgress = 0;
+        }
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.reset();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -114,7 +121,7 @@ public class PlayActivityFragment extends DialogFragment {
                 } else {
                     mMediaPlayer.start();
                     mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
-                    updateSeekBar();
+                    animateSeekBar();
                 }
             }
         });
@@ -131,6 +138,7 @@ public class PlayActivityFragment extends DialogFragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 String time = String.format("0:%02d", progress / 1000);
 
+                mSeekProgress = progress;
                 mTrackDurationProgressView.setText(time);
             }
 
@@ -141,7 +149,10 @@ public class PlayActivityFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mMediaPlayer.seekTo(seekBar.getProgress());
+                int seekProgress = seekBar.getProgress();
+
+                mSeekProgress = seekProgress;
+                mMediaPlayer.seekTo(seekProgress);
             }
         });
     }
@@ -159,12 +170,9 @@ public class PlayActivityFragment extends DialogFragment {
     }
 
     private void prepareMediaPlayer() {
-
-
         // Use preview track url to play track
         if (mNowPlaying.previewUrl != null) {
             mMediaPlayer.reset();
-            resetSeekBar();
 
             try {
                 mMediaPlayer.setDataSource(mNowPlaying.previewUrl);
@@ -179,8 +187,9 @@ public class PlayActivityFragment extends DialogFragment {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mIsPreparing = false;
+                mp.seekTo(mSeekProgress);
                 mp.start();
-                updateSeekBar();
+                animateSeekBar();
                 mPlayPause.setImageResource(android.R.drawable.ic_media_pause);
             }
         });
@@ -225,11 +234,7 @@ public class PlayActivityFragment extends DialogFragment {
         }
     }
 
-    private void resetSeekBar() {
-        mSeekBar.setProgress(0);
-    }
-
-    private void updateSeekBar() {
+    private void animateSeekBar() {
         r = new Runnable() {
             public void run() {
                 int timeMs = mMediaPlayer.getCurrentPosition();
@@ -261,6 +266,12 @@ public class PlayActivityFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
         // Possible media player state handling here
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SEEKBAR_POSITION, mSeekProgress);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
